@@ -3,3 +3,4 @@
 
 **/*.raw linguist-vendored
 **/*.ctl linguist-vendored
+**/*.pl linguist-vendored
