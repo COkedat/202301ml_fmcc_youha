@@ -1,13 +1,13 @@
 # 자~ 파일 읽어보기 를! 할거에요
 # 학습할 파일명들 저장된 ctl 파일 읽기
-file_path = "fmcc_train.ctl"
+train_path = "fmcc_train.ctl"
 
 # 읽어서 filenames에 저장
-with open(file_path) as f:
-    filenames = f.read().splitlines()
+with open(train_path) as f:
+    trainNames = f.read().splitlines()
 
 #테스트용 출력
-#print(filenames)
+#print(trainNames)
 
 
 '''
