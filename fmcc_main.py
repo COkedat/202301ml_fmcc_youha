@@ -1,13 +1,41 @@
-# 자~ 파일 읽어보기 를! 할거에요
-# 학습할 파일명들 저장된 ctl 파일 읽기
-train_path = "fmcc_train.ctl"
+import os
+import numpy as np
+import librosa as lr
+import soundfile as sf
 
-# 읽어서 filenames에 저장
-with open(train_path) as f:
-    trainNames = f.read().splitlines()
+#현재 경로 가져오기
+currentPath = os.getcwd()
+print(currentPath)
 
-#테스트용 출력
-#print(trainNames)
+# 학습파일 
+def readTrainFiles():
+    sample_rate = 16000 # 16KHz
+    data_length = sample_rate * 60 # 16KHz * 60
+
+    # 학습할 파일명들 저장된 ctl 파일 읽기
+    train_path = "./fmcc_train.ctl"
+
+    # 읽어서 filenames에 저장
+    with open(train_path) as f:
+        trainNames = f.read().splitlines()
+
+    # wav로 전부 변환
+    for target in trainNames:
+        if(target[0]=="F"):
+            dest="R/female/"
+        else:
+            dest="R/male/"
+        destinationPath=dest+target[6:19]+".wav"
+        target="raw16k/train/"+target+".raw"
+        with open(target, 'rb') as tf:
+            buf = tf.read()
+            buf = buf+b'0' if len(buf)%2 else buf
+        pcm_data = np.frombuffer(buf, dtype='int16')
+        wav_data = lr.util.buf_to_float(x=pcm_data, n_bytes=2)
+        sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
+        print(destinationPath+" done...")
+
+readTrainFiles()
 
 
 '''
