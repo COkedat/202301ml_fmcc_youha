@@ -2,6 +2,11 @@ import os
 import numpy as np
 import librosa as lr
 import soundfile as sf
+import os
+import rpy2
+from rpy2.robjects import pandas2ri, packages as robjects
+pandas2ri.activate()
+stats = packages.importr('stats')
 
 #현재 경로 가져오기
 currentPath = os.getcwd()
@@ -35,7 +40,13 @@ def readTrainFiles():
         sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
         print(destinationPath+" done...")
 
-readTrainFiles()
+#R 스크립트 불러오기
+def writeCSV():
+    r = robjects.r
+    r.source('R/extractfeatures_from_wav.R')
+
+#readTrainFiles()
+writeCSV()
 
 
 '''
