@@ -3,12 +3,12 @@ import numpy as np
 import librosa as lr
 import soundfile as sf
 import os
-from rpy2.robjects import pandas2ri, packages as robjects
-pandas2ri.activate()
-stats = packages.importr('stats')
+#from rpy2.robjects import pandas2ri, packages as robjects
+#pandas2ri.activate()
+#stats = packages.importr('stats')
 
 # 학습파일 
-def readTrainFiles():
+def readTrainWav():
     sample_rate = 16000 # 16KHz
     data_length = sample_rate * 60 # 16KHz * 60
 
@@ -19,7 +19,23 @@ def readTrainFiles():
     with open(train_path) as f:
         trainNames = f.read().splitlines()
 
-    # wav로 전부 변환
+    # wav로 전부 변환해서 train_wav에 저장
+    for target in trainNames:
+        if(target[0]=="F"):
+            dest="raw16k/train_wav/female/"
+        else:
+            dest="raw16k/train_wav/male/"
+        destinationPath=dest+target[6:19]+".wav"
+        target="raw16k/train/"+target+".raw"
+        with open(target, 'rb') as tf:
+            buf = tf.read()
+            buf = buf+b'0' if len(buf)%2 else buf
+        pcm_data = np.frombuffer(buf, dtype='int16')
+        wav_data = lr.util.buf_to_float(x=pcm_data, n_bytes=2)
+        sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
+        print(destinationPath+" done...")
+    
+    '''
     for target in trainNames:
         if(target[0]=="F"):
             dest="R/female/"
@@ -34,6 +50,7 @@ def readTrainFiles():
         wav_data = lr.util.buf_to_float(x=pcm_data, n_bytes=2)
         sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
         print(destinationPath+" done...")
+        '''
 
 #R 스크립트 불러오기
 def writeCSV():
@@ -41,10 +58,10 @@ def writeCSV():
     r.source('R/extractfeatures_from_wav.R')
 
 # wav 생성 안했으면 아래거 주석 해제하셈
-#readTrainFiles()
+readTrainWav()
 
 
-writeCSV()
+#writeCSV()
 
 
 '''
