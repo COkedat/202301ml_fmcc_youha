@@ -1,4 +1,4 @@
-import os
+#import os
 import numpy as np
 import librosa as lr
 import soundfile as sf
@@ -6,7 +6,7 @@ import soundfile as sf
 #pandas2ri.activate()
 #stats = packages.importr('stats')
 
-# 학습파일 
+# 학습용 wav로 변환
 def readTrainWav():
     sample_rate = 16000 # 16KHz
     data_length = sample_rate * 60 # 16KHz * 60
@@ -50,7 +50,8 @@ def readTrainWav():
         sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
         print(destinationPath+" done...")
         '''
-        
+
+#평가용 wav로 변환
 def readTestWav():
     sample_rate = 16000 # 16KHz
     data_length = sample_rate * 60 # 16KHz * 60
@@ -79,8 +80,6 @@ def writeCSV():
     r = robjects.r
     r.source('R/extractfeatures_from_wav.R')
 
-# wav 생성 안했으면 아래거 주석 해제하셈
-readTestWav()
 
 
 #writeCSV()
