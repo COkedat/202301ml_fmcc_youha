@@ -76,10 +76,11 @@ def readTestWav():
         print(destinationPath+" done...")
 
 #R 스크립트 불러오기
+'''
 def writeCSV():
     r = robjects.r
     r.source('R/extractfeatures_from_wav.R')
-
+'''
 
 
 #writeCSV()
