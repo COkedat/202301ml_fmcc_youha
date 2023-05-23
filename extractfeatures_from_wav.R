@@ -22,8 +22,8 @@ specan3 <- function(X, bp = c(0,22), wl = 2048, threshold = 5, parallel = 1){
     end <- as.numeric(unlist(X$end))
     sound.files <- as.character(unlist(X$sound.files))
     selec <- as.character(unlist(X$selec))
-  } else stop(paste(paste(c("sound.files", "selec", "start", "end")[!(c("sound.files", "selec", 
-                                                                        "start", "end") %in% colnames(X))], collapse=", "), "column(s) not found in data frame"))
+  } #else stop(paste(paste(c("sound.files", "selec", "start", "end")[!(c("sound.files", "selec", 
+   #                                                                     "start", "end") %in% colnames(X))], collapse=", "), "column(s) not found in data frame"))
   } else  stop("X is not a data frame")
   
   #if there are NAs in start or end stop
@@ -150,11 +150,14 @@ processFolder <- function(folderName) {
   # Get list of files in the folder.
   list <- list.files(folderName, '\\.wav')
   
+
+  sprintf("Working on %s", folderName)
   # Add file list to data.frame for processing.
   for (fileName in list) {
     row <- data.frame(fileName, 0, 0, 20)
     data <- rbind(data, row)
   }
+  print(getwd())
   
   # Set column names.
   names(data) <- c('sound.files', 'selec', 'start', 'end')
@@ -167,42 +170,14 @@ processFolder <- function(folderName) {
   
   # Move back into parent folder.
   setwd('..')
-  
+  setwd('..')
+
   acoustics
 }
 
-gender <- function(filePath) {
-  if (!exists('genderBoosted')) {
-    load('model.bin')
-  }
-  
-  # Setup paths.
-  currentPath <- getwd()
-  fileName <- basename(filePath)
-  path <- dirname(filePath)
-  
-  # Set directory to read file.
-  setwd(path)
-  
-  # Start with empty data.frame.
-  data <- data.frame(fileName, 0, 0, 20)
-  
-  # Set column names.
-  names(data) <- c('sound.files', 'selec', 'start', 'end')
-  
-  # Process files.
-  acoustics <- specan3(data, parallel=1)
-  
-  # Restore path.
-  setwd(currentPath)
-  
-  predict(genderCombo, newdata=acoustics)
-}
-
-
 # Load data
-males <- processFolder('male')
-females <- processFolder('female')
+males <- processFolder("./R/male")
+females <- processFolder("./R/female")
 
 # Set labels.
 males$label <- 1

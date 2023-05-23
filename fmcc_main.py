@@ -3,14 +3,9 @@ import numpy as np
 import librosa as lr
 import soundfile as sf
 import os
-import rpy2
 from rpy2.robjects import pandas2ri, packages as robjects
 pandas2ri.activate()
 stats = packages.importr('stats')
-
-#현재 경로 가져오기
-currentPath = os.getcwd()
-print(currentPath)
 
 # 학습파일 
 def readTrainFiles():
@@ -45,7 +40,10 @@ def writeCSV():
     r = robjects.r
     r.source('R/extractfeatures_from_wav.R')
 
+# wav 생성 안했으면 아래거 주석 해제하셈
 #readTrainFiles()
+
+
 writeCSV()
 
 
