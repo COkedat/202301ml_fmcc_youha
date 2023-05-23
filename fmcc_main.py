@@ -2,7 +2,6 @@ import os
 import numpy as np
 import librosa as lr
 import soundfile as sf
-import os
 #from rpy2.robjects import pandas2ri, packages as robjects
 #pandas2ri.activate()
 #stats = packages.importr('stats')
@@ -51,6 +50,29 @@ def readTrainWav():
         sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
         print(destinationPath+" done...")
         '''
+        
+def readTestWav():
+    sample_rate = 16000 # 16KHz
+    data_length = sample_rate * 60 # 16KHz * 60
+
+    # 학습할 파일명들 저장된 ctl 파일 읽기
+    train_path = "./fmcc_test.ctl"
+
+    # 읽어서 filenames에 저장
+    with open(train_path) as f:
+        trainNames = f.read().splitlines()
+
+    # wav로 전부 변환해서 train_wav에 저장
+    for target in trainNames:
+        destinationPath="raw16k/test_wav/"+target+".wav"
+        target="raw16k/test/"+target+".raw"
+        with open(target, 'rb') as tf:
+            buf = tf.read()
+            buf = buf+b'0' if len(buf)%2 else buf
+        pcm_data = np.frombuffer(buf, dtype='int16')
+        wav_data = lr.util.buf_to_float(x=pcm_data, n_bytes=2)
+        sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
+        print(destinationPath+" done...")
 
 #R 스크립트 불러오기
 def writeCSV():
@@ -58,7 +80,7 @@ def writeCSV():
     r.source('R/extractfeatures_from_wav.R')
 
 # wav 생성 안했으면 아래거 주석 해제하셈
-readTrainWav()
+readTestWav()
 
 
 #writeCSV()
