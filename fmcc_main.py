@@ -35,23 +35,7 @@ def readTrainWav():
         wav_data = lr.util.buf_to_float(x=pcm_data, n_bytes=2)
         sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
         print(destinationPath+" done...")
-        
-        '''
-    for target in trainNames:
-        if(target[0]=="F"):
-            dest="R/female/"
-        else:
-            dest="R/male/"
-        destinationPath=dest+target[6:19]+".wav"
-        target="raw16k/train/"+target+".raw"
-        with open(target, 'rb') as tf:
-            buf = tf.read()
-            buf = buf+b'0' if len(buf)%2 else buf
-        pcm_data = np.frombuffer(buf, dtype='int16')
-        wav_data = lr.util.buf_to_float(x=pcm_data, n_bytes=2)
-        sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
-        print(destinationPath+" done...")
-        '''
+
         
 # 학습용 wav 잡음 삭제 -> R_train 저장
 def denoiseTrainWav():
@@ -75,6 +59,7 @@ def denoiseTrainWav():
             fileName = train_wav_path + "/" + wav_file
             dest = train_wav_denoise_path + "/" + wav_file[0:13] + "_denoise.wav"
             fmcc_denoiser.denoiseWav(fileName, dest)
+            print(dest+" done...")
     
 
 #평가용 wav로 변환
@@ -102,7 +87,7 @@ def readTestWav():
         print(destinationPath+" done...")
 
 # 평가용 wav 잡음 삭제 -> R_test 저장
-def denoisTestWav():
+def denoiseTestWav():
     test_wav_path = 'raw16k/test_wav'
     test_wav_denoise_path = 'R_test'
     file_list = os.listdir(test_wav_path)
@@ -110,9 +95,13 @@ def denoisTestWav():
     
     for wav_file in wav_files:
         fileName = test_wav_path + "/" + wav_file
-        dest = test_wav_denoise_path + "/" + wav_file[0:13] + "_denoise.wav"
+        dest = test_wav_denoise_path + "/" + wav_file[0:14] + "_denoise.wav"
         fmcc_denoiser.denoiseWav(fileName, dest)
-            
+        print(dest+" done...")
+
+
+#denoiseTrainWav()
+denoiseTestWav()   
 #R 스크립트 불러오기
 '''
 def writeCSV():
