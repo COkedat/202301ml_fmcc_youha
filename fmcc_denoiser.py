@@ -4,14 +4,10 @@ import soundfile as sf
 from denoiser import pretrained
 from denoiser.dsp import convert_audio
 
-#torch cuda로 설치되어있어야함
-#걍 cuda 삭제함
+#torch cpu로 변경 (cuda는 torch 버젼 문제나 그런거 생길 수 있어서 그냥 CPU로 통일)
 def denoiseWav(fileName, destName):
-    model = pretrained.dns64()#.cuda()
+    model = pretrained.dns64()
     wav, sr = torchaudio.load(fileName)
-    #wav = convert_audio(wav.cuda(), sr, model.sample_rate, model.chin)
     with torch.no_grad():
         denoised = model(wav[None])[0].cpu()
     torchaudio.save(destName, denoised, 16000, bits_per_sample=16)
-
-
