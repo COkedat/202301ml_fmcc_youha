@@ -2,7 +2,11 @@ import os
 import numpy as np
 import librosa as lr
 import soundfile as sf
+<<<<<<< HEAD
 import fmcc_denoiser
+=======
+from fmcc_denoiser import denoiseWav
+>>>>>>> d3d0374691472b987003d4bb5ce3d003f56a64c5
 #from rpy2.robjects import pandas2ri, packages as robjects
 #pandas2ri.activate()
 #stats = packages.importr('stats')
