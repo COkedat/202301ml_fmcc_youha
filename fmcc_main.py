@@ -55,7 +55,6 @@ def readTrainWav():
         
 # 학습용 wav 잡음 삭제 -> R_train 저장
 def denoiseTrainWav():
-        
     train_path = 'raw16k/train_wav'
     train_file_list = os.listdir(train_path)
 
@@ -104,27 +103,15 @@ def readTestWav():
 
 # 평가용 wav 잡음 삭제 -> R_test 저장
 def denoisTestWav():
-        
-    test_path = 'raw16k/test_wav'
-    test_file_list = os.listdir(test_path)
-
-    for sex in test_file_list:
-        if sex == 'female':
-            test_wav_path = 'raw16k/test_wav/female'
-            test_wav_denoise_path = 'R_test/female'
-            file_list = os.listdir(test_wav_path)
-            wav_files = [file for file in file_list if file.endswith('.wav')]
+    test_wav_path = 'raw16k/test_wav'
+    test_wav_denoise_path = 'R_test'
+    file_list = os.listdir(test_wav_path)
+    wav_files = [file for file in file_list if file.endswith('.wav')]
     
-        elif sex == 'male':
-            test_wav_path = 'raw16k/test_wav/male'
-            test_wav_denoise_path = 'R_test/male'
-            file_list = os.listdir(test_wav_path)
-            wav_files = [file for file in file_list if file.endswith('.wav')]
-    
-        for wav_file in wav_files:
-            fileName = test_wav_path + "/" + wav_file
-            dest = test_wav_denoise_path + "/" + wav_file[0:13] + "_denoise.wav"
-            fmcc_denoiser.denoiseWav(fileName, dest)
+    for wav_file in wav_files:
+        fileName = test_wav_path + "/" + wav_file
+        dest = test_wav_denoise_path + "/" + wav_file[0:13] + "_denoise.wav"
+        fmcc_denoiser.denoiseWav(fileName, dest)
             
 #R 스크립트 불러오기
 '''
