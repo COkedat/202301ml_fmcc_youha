@@ -30,7 +30,6 @@ def train_set(train_csv):
     train_data['label'] = train_data['label'].map(class_mapping)
 
     # X,y를 생성하고 데이터셋을 학습용과 평가용으로 나누기
-
     X, y = train_data.iloc[:, :-1].values, train_data.iloc[:, -1].values
 
     X_train, X_test, y_train, y_test =\
@@ -45,7 +44,6 @@ def train_set(train_csv):
 
 
     #Train support vector machine model
-
     svm = SVC()
     print("Train started")
     svm.fit(X_train_std, y_train)
@@ -60,6 +58,24 @@ def train_set(train_csv):
 
     precision, recall, fscore, support = precision_recall_fscore_support(y_test, y_pred_sm, average='micro')
     print("Precision, Recall and fscore:",precision, recall, fscore,)
+
+
+    #Train random forest model
+    forest = RandomForestClassifier(n_estimators=5, random_state=0)
+    forest.fit(X_train_std, y_train)
+
+    print("Random Forest")
+    print("Accuracy on training set: {:.3f}".format(forest.score(X_train_std, y_train)))
+    print("Accuracy on test set: {:.3f}".format(forest.score(X_test_std, y_test)))
+
+    y_pred_forest = forest.predict(X_test_std)
+    print("Predicted value: ",y_pred_forest)
+
+    precision, recall, fscore, support = precision_recall_fscore_support(y_test, y_pred_forest, average='micro')
+    print("Precision, Recall and fscore:",precision, recall, fscore,)
+
+
+
 
     #여기서부턴 임시임(테스트용)
     #Read the file which got generated using our voice samples and using code written in R.
@@ -77,6 +93,7 @@ def train_set(train_csv):
 
     #Predicting the target variable using SVM
     y1_pred_svm = svm.predict(X1_std)
+    y1_pred_forest = forest.predict(X1_std)
     print("SVM 예측 결과: ", y1_pred_svm)
     
 
@@ -94,7 +111,7 @@ def train_set(train_csv):
             f.write(" ")
             if(y1_pred_svm[i].item()==0):
                 f.write("feml")
-            else:
+            elif(y1_pred_svm[i].item()==1):
                 f.write("male") 
             f.write("\n")
     
