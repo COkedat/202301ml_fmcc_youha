@@ -8,7 +8,8 @@ from sklearn.metrics import precision_recall_fscore_support
 
 # 모델 저장 및 불러오기용
 import joblib
-
+from sklearn.model_selection import learning_curve
+from sklearn.model_selection import ShuffleSplit
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -34,7 +35,7 @@ def train_set(train_csv):
 
     X_train, X_test, y_train, y_test =\
         train_test_split(X, y, 
-                        test_size=0.32,
+                        test_size=0.35,
                         random_state=0, 
                         stratify=y)
 
@@ -43,11 +44,13 @@ def train_set(train_csv):
     X_test_std = stdsc.transform(X_test)
 
 
-    #Train support vector machine model
+    # Train support vector machine model
+    # 서포트 벡터 머신 모델 학습
     svm = SVC()
     print("Train started")
     svm.fit(X_train_std, y_train)
-    joblib.dump(svm, 'trained.pkl') 
+    joblib.dump(svm, './trained/svm.pkl') 
+
 
     print("Support Vector Machine")
     print("Accuracy on training set: {:.3f}".format(svm.score(X_train_std, y_train)))
@@ -58,22 +61,6 @@ def train_set(train_csv):
 
     precision, recall, fscore, support = precision_recall_fscore_support(y_test, y_pred_sm, average='micro')
     print("Precision, Recall and fscore:",precision, recall, fscore,)
-
-
-    #Train random forest model
-    forest = RandomForestClassifier(n_estimators=5, random_state=0)
-    forest.fit(X_train_std, y_train)
-
-    print("Random Forest")
-    print("Accuracy on training set: {:.3f}".format(forest.score(X_train_std, y_train)))
-    print("Accuracy on test set: {:.3f}".format(forest.score(X_test_std, y_test)))
-
-    y_pred_forest = forest.predict(X_test_std)
-    print("Predicted value: ",y_pred_forest)
-
-    precision, recall, fscore, support = precision_recall_fscore_support(y_test, y_pred_forest, average='micro')
-    print("Precision, Recall and fscore:",precision, recall, fscore,)
-
 
 
 
@@ -93,8 +80,8 @@ def train_set(train_csv):
 
     #Predicting the target variable using SVM
     y1_pred_svm = svm.predict(X1_std)
-    y1_pred_forest = forest.predict(X1_std)
-    print("SVM 예측 결과: ", y1_pred_svm)
+    #y1_pred_forest = forest.predict(X1_std)
+    #print("SVM 예측 결과: ", y1_pred_svm)
     
 
     # 학습할 파일명들 저장된 ctl 파일 읽기
@@ -115,17 +102,9 @@ def train_set(train_csv):
                 f.write("male") 
             f.write("\n")
     
-    
-
-
 
 
 train_set("voice_train.csv")
-
-
-
-
-
 
 
 
@@ -155,4 +134,5 @@ def predict_set(test_csv):
     y1_pred_svm = svm.predict(X1_std)
 
     print("SVM: ",y1_pred_svm)
+
 
