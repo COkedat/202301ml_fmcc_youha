@@ -177,21 +177,21 @@ processFolder <- function(folderName) {
 # Load data
 tests <- processFolder("./R_test")
 
-data <- rbind(tests)
+data_t <- rbind(tests)
 
 # Set labels.
 #tests$label <- 0
 
 # Remove unused columns.
-data$duration <- NULL
-data$sound.files <- NULL
-data$selec <- NULL
-data$peakf <- NULL
+data_t$duration <- NULL
+data_t$sound.files <- NULL
+data_t$selec <- NULL
+data_t$peakf <- NULL
 
 # Remove rows containing NA's.
-data <- data[complete.cases(data),]
+data_t <- data_t[complete.cases(data_t),]
 
 # Write out csv dataset.
-write.csv(data, file='voice_test.csv', sep=',', row.names=F)
+write.csv(data_t, file='voice_test.csv', sep=',', row.names=F)
 
 
