@@ -190,10 +190,11 @@ processFolder <- function(folderName) {
 # Load data
 tests <- processFolder("./R_test")
 
-data_t <- rbind(tests)
-
 # Set labels.
-#tests$label <- 0
+# 테스트셋의 라벨은 의미없음
+tests$label <- 1
+data_t <- rbind(tests)
+data_t$label <- factor(data_t$label, labels=c('male'))
 
 # Remove unused columns.
 data_t$duration <- NULL
