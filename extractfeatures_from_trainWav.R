@@ -181,7 +181,7 @@ processFolder <- function(folderName) {
   acoustics <- specan3(data, parallel=1)
   
   # Move back into parent folder.
-  # 전 폴더로 이동
+  # 전 폴더로 이동, 학습용은 폴더 두개라 두번 해야함
   setwd('..')
   setwd('..')
 
