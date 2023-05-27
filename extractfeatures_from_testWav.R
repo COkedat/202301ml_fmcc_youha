@@ -84,10 +84,12 @@ specan3 <- function(X, bp = c(0,22), wl = 2048, threshold = 5, parallel = 1){
     
     
     #frequency spectrum analysis
+    # 주파수 스펙트럼 분석
     songspec <- seewave::spec(r, f = r@samp.rate, plot = FALSE)
     analysis <- seewave::specprop(songspec, f = r@samp.rate, flim = c(0, 280/1000), plot = FALSE)
     
     #save parameters
+    # 파라미터 저장
     meanfreq <- analysis$mean/1000
     sd <- analysis$sd/1000
     median <- analysis$median/1000
@@ -102,9 +104,11 @@ specan3 <- function(X, bp = c(0,22), wl = 2048, threshold = 5, parallel = 1){
     centroid <- analysis$cent/1000
     
     #Frequency with amplitude peaks
+    #진폭 피크를 포함한 주파수?
     peakf <- 0#seewave::fpeaks(songspec, f = r@samp.rate, wl = wl, nmax = 3, plot = FALSE)[1, 1]
     
     #Fundamental frequency parameters
+    # 필수적인 주파수 파라미터
     ff <- seewave::fund(r, f = r@samp.rate, ovlp = 50, threshold = threshold, 
                         fmax = 280, ylim=c(0, 280/1000), plot = FALSE, wl = wl)[, 2]
     meanfun<-mean(ff, na.rm = T)
@@ -112,6 +116,7 @@ specan3 <- function(X, bp = c(0,22), wl = 2048, threshold = 5, parallel = 1){
     maxfun<-max(ff, na.rm = T)
     
     #Dominant frecuency parameters
+    # 주요한 주파수 파라미터
     y <- seewave::dfreq(r, f = r@samp.rate, wl = wl, ylim=c(0, 280/1000), ovlp = 0, plot = F, threshold = threshold, bandpass = b * 1000, fftw = TRUE)[, 2]
     meandom <- mean(y, na.rm = TRUE)
     mindom <- min(y, na.rm = TRUE)
@@ -128,11 +133,13 @@ specan3 <- function(X, bp = c(0,22), wl = 2048, threshold = 5, parallel = 1){
     if(mindom==maxdom) modindx<-0 else modindx <- mean(changes, na.rm = T)/dfrange
     
     #save results
+    # 결과 저장
     return(c(duration, meanfreq, sd, median, Q25, Q75, IQR, skew, kurt, sp.ent, sfm, mode, 
              centroid, peakf, meanfun, minfun, maxfun, meandom, mindom, maxdom, dfrange, modindx))
   }))
   
   #change result names
+  # 결과명 변경
   
   rownames(x) <- c("duration", "meanfreq", "sd", "median", "Q25", "Q75", "IQR", "skew", "kurt", "sp.ent", 
                    "sfm","mode", "centroid", "peakf", "meanfun", "minfun", "maxfun", "meandom", "mindom", "maxdom", "dfrange", "modindx")
@@ -145,14 +152,17 @@ specan3 <- function(X, bp = c(0,22), wl = 2048, threshold = 5, parallel = 1){
 
 processFolder <- function(folderName) {
   # Start with empty data.frame.
+  # 빈 데이터.프레임으로 시작
   data <- data.frame()
   
   # Get list of files in the folder.
+  # 폴더의 파일 리스트 가져옴
   list <- list.files(folderName, '\\.wav')
   
 
   sprintf("Working on %s", folderName)
   # Add file list to data.frame for processing.
+  # 데이터.프레임에 프로세싱을 위한 파일 리스트 추가
   for (fileName in list) {
     row <- data.frame(fileName, 0, 0, 20)
     data <- rbind(data, row)
@@ -160,15 +170,18 @@ processFolder <- function(folderName) {
   print(getwd())
   
   # Set column names.
+  # 칼럼 이름 저장
   names(data) <- c('sound.files', 'selec', 'start', 'end')
   
   # Move into folder for processing.
+  # 프로세싱을 위해 폴더로 이동
   setwd(folderName)
   
   # Process files.
   acoustics <- specan3(data, parallel=1)
   
   # Move back into parent folder.
+  # 전 폴더로 이동
   setwd('..')
 
   acoustics
