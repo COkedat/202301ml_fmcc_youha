@@ -176,8 +176,8 @@ processFolder <- function(folderName) {
 }
 
 # Load data
-males <- processFolder("./R/male")
-females <- processFolder("./R/female")
+males <- processFolder("./R_train/male")
+females <- processFolder("./R_train/female")
 
 # Set labels.
 males$label <- 1
@@ -195,6 +195,6 @@ data$peakf <- NULL
 data <- data[complete.cases(data),]
 
 # Write out csv dataset.
-write.csv(data, file='voice.csv', sep=',', row.names=F)
+write.csv(data, file='voice_train.csv', sep=',', row.names=F)
 
 
