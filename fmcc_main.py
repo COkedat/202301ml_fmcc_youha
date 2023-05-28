@@ -1,12 +1,19 @@
+# os랑 넘파이 불러오기
 import os
 import numpy as np
+
+# 사운드용
 import librosa as lr
 import soundfile as sf
-import fmcc_denoiser
+
+# 디노이저 함수 불러오기
 from fmcc_denoiser import denoiseWav
-#from rpy2.robjects import pandas2ri, packages as robjects
-#pandas2ri.activate()
-#stats = packages.importr('stats')
+
+# 학습함수, 테스트함수 불러오기
+# main에 반영하나?
+# 중간과정에 R 스크립트 때문에 살짝 애매함
+from fmcc_train_predict import train_set, predict_set
+
 
 # 학습용 wav로 변환
 def readTrainWav():
@@ -58,17 +65,14 @@ def denoiseTrainWav():
         for wav_file in wav_files:
             fileName = train_wav_path + "/" + wav_file
             dest = train_wav_denoise_path + "/" + wav_file[0:13] + "_denoise.wav"
-            fmcc_denoiser.denoiseWav(fileName, dest)
+            denoiseWav(fileName, dest)
             print(dest+" done...")
     
 
 #평가용 wav로 변환
-def readTestWav():
+def readTestWav(train_path = "./fmcc_test900.ctl"):
     sample_rate = 16000 # 16KHz
     data_length = sample_rate * 60 # 16KHz * 60
-
-    # 학습할 파일명들 저장된 ctl 파일 읽기
-    train_path = "./fmcc_test.ctl"
 
     # 읽어서 filenames에 저장
     with open(train_path) as f:
@@ -96,37 +100,45 @@ def denoiseTestWav():
     for wav_file in wav_files:
         fileName = test_wav_path + "/" + wav_file
         dest = test_wav_denoise_path + "/" + wav_file[0:14] + "_denoise.wav"
-        fmcc_denoiser.denoiseWav(fileName, dest)
+        denoiseWav(fileName, dest)
         print(dest+" done...")
 
 
 #denoiseTrainWav()
 denoiseTestWav()   
-#R 스크립트 불러오기
-'''
-def writeCSV():
-    r = robjects.r
-    r.source('R/extractfeatures_from_wav.R')
-'''
 
 
-#writeCSV()
+def main():
+    print("학습용 raw 파일 변환을 시작합니다")
+    readTrainWav()
+
+    path=input("테스트용 ctl 파일명을 입력해주세요 : ")
+    print("테스트용 raw 파일 변환을 시작합니다")
+    readTestWav(path)
+
+    print("학습용 wav 파일 잡음 제거를 시작합니다")
+    denoiseTrainWav()
+    print("테스트용 wav 파일 잡음 제거를 시작합니다")
+    denoiseTestWav()
+
+if __name__ == "__main__":
+	main()
 
 
 '''
 
 앞으로 구현해야하는것들
 1. 전처리
-- 지나치게 큰잡음 제거
+- 지나치게 큰잡음 제거 (ㅇㅋ)
 - 볼륨 조정(?)
 
 
 2. 학습
-- 전처리한 사운드들을 기반으로 학습함
+- 전처리한 사운드들을 기반으로 학습함 (ㅇㅋ)
 
 
 3. 학습 테스트
-- 물론 테스트용 데이터도 잡음이 섞여있기 때문에 전처리 후 평가해야함
-- 대충 그럼
+- 물론 테스트용 데이터도 잡음이 섞여있기 때문에 전처리 후 평가해야함 (ㅇㅋ)
+- 대충 됨
 
 '''

@@ -1,24 +1,25 @@
+# 판다랑 넘파이
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+
+# 분류기
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
+
+# 플롯용 및 평가용
 import matplotlib.pyplot as plt
 from sklearn.metrics import precision_recall_fscore_support
 
 # 모델 저장 및 불러오기용
 import joblib
-from sklearn.model_selection import learning_curve
-from sklearn.model_selection import ShuffleSplit
 
+# 스케일러와 학습/테스트 분리기
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-# 일단 불러오기
-
-
 
 # 학습용 csv 갖다가 학습하기
 def train_set(train_csv):
+    #R에서 뽑은 학습용 CSV 불러오기
     train_data = pd.read_csv(train_csv)
     train_data.head()
     train_data.groupby("label").count()
@@ -51,7 +52,6 @@ def train_set(train_csv):
     svm.fit(X_train_std, y_train)
     joblib.dump(svm, './trained/svm.pkl') 
 
-
     print("Support Vector Machine")
     print("Accuracy on training set: {:.3f}".format(svm.score(X_train_std, y_train)))
     print("Accuracy on test set: {:.3f}".format(svm.score(X_test_std, y_test)))
@@ -63,12 +63,15 @@ def train_set(train_csv):
     print("Precision, Recall and fscore:",precision, recall, fscore,)
 
 
-
-    #여기서부턴 임시임(테스트용)
-    #Read the file which got generated using our voice samples and using code written in R.
+# 평가용 csv 갖다가 평가하기
+def predict_set(test_csv):
+    #R에서 뽑은 테스트용 CSV 불러오기
     print("여기서부터 테스트용 csv 비교")
-    test_data = pd.read_csv("voice_test.csv")
+    test_data = pd.read_csv(test_csv)
     test_data.head()
+
+
+    svm= joblib.load('./trained/svm.pkl')
 
     #X, Y 생성
     X1, y1 = test_data.iloc[:, :-1].values, test_data.iloc[:, -1].values
@@ -77,15 +80,14 @@ def train_set(train_csv):
     # 특징들을 정규화
     stdsc = StandardScaler()
     X1_std = stdsc.fit_transform(X1)
-
+   
     #Predicting the target variable using SVM
     y1_pred_svm = svm.predict(X1_std)
     #y1_pred_forest = forest.predict(X1_std)
-    #print("SVM 예측 결과: ", y1_pred_svm)
     
 
     # 학습할 파일명들 저장된 ctl 파일 읽기
-    train_path = "./fmcc_test.ctl"
+    train_path = "./fmcc_test900.ctl"
 
     # 읽어서 trainNames에 저장
     with open(train_path) as f:
@@ -101,38 +103,5 @@ def train_set(train_csv):
             elif(y1_pred_svm[i].item()==1):
                 f.write("male") 
             f.write("\n")
-    
-
-
-train_set("voice_train.csv")
-
-
-
-
-
-
-
-
-# 평가용 csv 갖다가 평가하기
-# 아직 다 작성 못함
-def predict_set(test_csv):
-    #Read the file which got generated using our voice samples and using code written in R.
-    test_data = pd.read_csv(test_csv)
-    test_data.head()
-
-    svm = joblib.load('trained.pkl')
-
-    #X, Y 생성
-    X1, y1 = test_data.iloc[:, :-1].values, test_data.iloc[:, -1].values
-    y1
-
-    # 특징들을 정규화
-    stdsc = StandardScaler()
-    X1_std = stdsc.fit_transform(X1)
-
-    #Predicting the target variable using SVM
-    y1_pred_svm = svm.predict(X1_std)
-
-    print("SVM: ",y1_pred_svm)
 
 
