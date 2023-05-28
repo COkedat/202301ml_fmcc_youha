@@ -15,6 +15,9 @@ from fmcc_denoiser import denoiseWav
 from fmcc_train_predict import train_set, predict_set
 
 
+import rpy2.robjects as robjects
+
+
 # 학습용 wav로 변환
 def readTrainWav():
     sample_rate = 16000 # 16KHz
@@ -104,22 +107,20 @@ def denoiseTestWav():
         print(dest+" done...")
 
 
-#denoiseTrainWav()
-denoiseTestWav()   
-
-
 def main():
     print("학습용 raw 파일 변환을 시작합니다")
-    readTrainWav()
+    #readTrainWav()
 
     path=input("테스트용 ctl 파일명을 입력해주세요 : ")
     print("테스트용 raw 파일 변환을 시작합니다")
-    readTestWav(path)
+    #readTestWav(path)
 
     print("학습용 wav 파일 잡음 제거를 시작합니다")
-    denoiseTrainWav()
+    #denoiseTrainWav()
     print("테스트용 wav 파일 잡음 제거를 시작합니다")
-    denoiseTestWav()
+    #denoiseTestWav()
+
+    os.system("C:/Program Files/R/R-4.1.3/bin/x64/RScript.exe ./extractfeatures_from_testWav.R")
 
 if __name__ == "__main__":
 	main()

@@ -1,4 +1,4 @@
-packages <- c('tuneR', 'seewave', 'fftw', 'caTools', 'randomForest', 'warbleR', 'mice', 'e1071', 'rpart', 'rpart-plot', 'xgboost', 'e1071')
+packages <- c('tuneR', 'seewave', 'fftw', 'caTools', 'randomForest', 'warbleR', 'mice', 'e1071', 'rpart', 'xgboost', 'e1071')
 if (length(setdiff(packages, rownames(installed.packages()))) > 0) {
   install.packages(setdiff(packages, rownames(installed.packages())))  
 }
@@ -6,7 +6,7 @@ library(tuneR)
 library(seewave)
 library(caTools)
 library(rpart)
-library(rpart.plot)
+#library(rpart.plot)
 library(randomForest)
 library(warbleR)
 library(mice)
