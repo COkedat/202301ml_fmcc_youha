@@ -10,12 +10,10 @@ import soundfile as sf
 from fmcc_denoiser import denoiseWav
 
 # 학습함수, 테스트함수 불러오기
-# main에 반영하나?
-# 중간과정에 R 스크립트 때문에 살짝 애매함
 from fmcc_train_predict import train_set, predict_set
 
-
-import rpy2.robjects as robjects
+# 매개변수 받기용
+import sys
 
 
 # 학습용 wav로 변환
@@ -44,7 +42,7 @@ def readTrainWav():
         pcm_data = np.frombuffer(buf, dtype='int16')
         wav_data = lr.util.buf_to_float(x=pcm_data, n_bytes=2)
         sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
-        print(destinationPath+" done...")
+        print(destinationPath+" done... \r", end="")
 
         
 # 학습용 wav 잡음 삭제 -> R_train 저장
@@ -69,11 +67,15 @@ def denoiseTrainWav():
             fileName = train_wav_path + "/" + wav_file
             dest = train_wav_denoise_path + "/" + wav_file[0:13] + "_denoise.wav"
             denoiseWav(fileName, dest)
-            print(dest+" done...")
+            print(dest+" done... \r", end="")
     
 
 #평가용 wav로 변환
 def readTestWav(train_path = "./fmcc_test900.ctl"):
+    #파일명 비어있을 경우
+    if(len(train_path)==0):
+        print("파일명이 비어있으므로 fmcc_test900.ctl 으로 진행")
+        train_path="voice_test.csv"
     sample_rate = 16000 # 16KHz
     data_length = sample_rate * 60 # 16KHz * 60
 
@@ -91,7 +93,7 @@ def readTestWav(train_path = "./fmcc_test900.ctl"):
         pcm_data = np.frombuffer(buf, dtype='int16')
         wav_data = lr.util.buf_to_float(x=pcm_data, n_bytes=2)
         sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
-        print(destinationPath+" done...")
+        print(destinationPath+" done... \r", end="")
 
 # 평가용 wav 잡음 삭제 -> R_test 저장
 def denoiseTestWav():
@@ -104,23 +106,48 @@ def denoiseTestWav():
         fileName = test_wav_path + "/" + wav_file
         dest = test_wav_denoise_path + "/" + wav_file[0:14] + "_denoise.wav"
         denoiseWav(fileName, dest)
-        print(dest+" done...")
+        print(dest+" done... \r", end="")
 
 
 def main():
-    print("학습용 raw 파일 변환을 시작합니다")
-    #readTrainWav()
+    try:
+        print(sys.argv[1])
+    except:
+        print("매개변수가 없?는듯???")
+        input("아무 키나 입력해서 종료")
+        exit()
 
-    path=input("테스트용 ctl 파일명을 입력해주세요 : ")
-    print("테스트용 raw 파일 변환을 시작합니다")
-    #readTestWav(path)
+    if(sys.argv[1]=="trainWav"):
+        print("학습용 raw 파일 변환을 시작합니다")
+        readTrainWav()
+        print("학습용 wav 파일 잡음 제거를 시작합니다")
+        denoiseTrainWav()
 
-    print("학습용 wav 파일 잡음 제거를 시작합니다")
-    #denoiseTrainWav()
-    print("테스트용 wav 파일 잡음 제거를 시작합니다")
-    #denoiseTestWav()
+    elif(sys.argv[1]=="testWav"):
+        path=input("테스트용 ctl 파일명을 입력해주세요 : ")
+        print("테스트용 raw 파일 변환을 시작합니다")
+        readTestWav(path)
+        print("테스트용 wav 파일 잡음 제거를 시작합니다")
+        denoiseTestWav()
 
-    os.system("C:/Program Files/R/R-4.1.3/bin/x64/RScript.exe ./extractfeatures_from_testWav.R")
+    elif(sys.argv[1]=="train"):
+        path=input("학습용 csv 파일명을 입력해주세요 : ")
+        print("학습을 시작합니다")
+        train_set(path)
+
+    elif(sys.argv[1]=="predict"):
+        path=input("테스트용 csv 파일명을 입력해주세요 : ")
+        print("평가를 시작합니다")
+        predict_set(path)
+
+    else:
+        print("? 어캐옴??")
+
+
+    input("아무 키나 입력해서 종료")
+    exit()
+
+
 
 if __name__ == "__main__":
 	main()

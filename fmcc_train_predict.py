@@ -19,6 +19,11 @@ from sklearn.preprocessing import StandardScaler
 
 # 학습용 csv 갖다가 학습하기
 def train_set(train_csv):
+    #파일명 비어있을 경우
+    if(len(train_csv)==0):
+        print("파일명이 비어있으므로 voice_train.csv 으로 진행")
+        train_csv="voice_train.csv"
+
     #R에서 뽑은 학습용 CSV 불러오기
     train_data = pd.read_csv(train_csv)
     train_data.head()
@@ -65,8 +70,12 @@ def train_set(train_csv):
 
 # 평가용 csv 갖다가 평가하기
 def predict_set(test_csv):
+    #파일명 비어있을 경우
+    if(len(test_csv)==0):
+        print("파일명이 비어있으므로 voice_test.csv 으로 진행")
+        test_csv="voice_test.csv"
+
     #R에서 뽑은 테스트용 CSV 불러오기
-    print("여기서부터 테스트용 csv 비교")
     test_data = pd.read_csv(test_csv)
     test_data.head()
 
