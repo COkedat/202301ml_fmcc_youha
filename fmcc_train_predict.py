@@ -55,7 +55,8 @@ def train_set(train_csv):
     svm = SVC()
     print("Train started")
     svm.fit(X_train_std, y_train)
-    joblib.dump(svm, './trained/svm.pkl') 
+    joblib.dump(svm, './trained/svm.pkl')
+    print(svm.get_params())
 
     print("Support Vector Machine")
     print("Accuracy on training set: {:.3f}".format(svm.score(X_train_std, y_train)))
