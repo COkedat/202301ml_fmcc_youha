@@ -3,11 +3,10 @@ import pandas as pd
 import numpy as np
 
 # 분류기
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 
 # 플롯용 및 평가용
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt # 곧 사용하긴 해야함
 from sklearn.metrics import precision_recall_fscore_support
 
 # 모델 저장 및 불러오기용
@@ -16,6 +15,9 @@ import joblib
 # 스케일러와 학습/테스트 분리기
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+
+# 파일 크기 측정용
+from os.path import getsize
 
 # 학습용 csv 갖다가 학습하기
 def train_set(train_csv):
@@ -60,9 +62,9 @@ def train_set(train_csv):
         print("정상 fitted")
     else:
         print("fit 문제 있음")
-    print("특징 수 :  ",svm.n_features_in_)
     print("옵션 : ",svm.get_params())
-
+    print("특징 수 :  ",svm.n_features_in_,"개")
+    print("모델 사이즈 : ", getsize('./trained/svm.pkl'),"bytes")
     print("Support Vector Machine")
     print("Accuracy on training set: {:.3f}".format(svm.score(X_train_std, y_train)))
     print("Accuracy on test set: {:.3f}".format(svm.score(X_test_std, y_test)))
