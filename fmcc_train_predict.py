@@ -56,7 +56,12 @@ def train_set(train_csv):
     print("Train started")
     svm.fit(X_train_std, y_train)
     joblib.dump(svm, './trained/svm.pkl')
-    print(svm.get_params())
+    if(svm.fit_status_==0):
+        print("정상 fitted")
+    else:
+        print("fit 문제 있음")
+    print("특징 수 :  ",svm.n_features_in_)
+    print("옵션 : ",svm.get_params())
 
     print("Support Vector Machine")
     print("Accuracy on training set: {:.3f}".format(svm.score(X_train_std, y_train)))
