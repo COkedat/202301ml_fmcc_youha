@@ -68,14 +68,14 @@ def denoiseTrainWav():
             dest = train_wav_denoise_path + "/" + wav_file[0:13] + "_denoise.wav"
             denoiseWav(fileName, dest)
             print(dest+" done... \r", end="")
-    
+   
 
 #평가용 wav로 변환
 def readTestWav(train_path = "./fmcc_test900.ctl"):
     #파일명 비어있을 경우
     if(len(train_path)==0):
         print("파일명이 비어있으므로 fmcc_test900.ctl 으로 진행")
-        train_path="voice_test.csv"
+        train_path="./fmcc_test900.ctl"
     sample_rate = 16000 # 16KHz
     data_length = sample_rate * 60 # 16KHz * 60
 
@@ -95,6 +95,7 @@ def readTestWav(train_path = "./fmcc_test900.ctl"):
         sf.write(destinationPath, wav_data, 16000, format='WAV', endian='LITTLE', subtype='PCM_16')
         print(destinationPath+" done... \r", end="")
 
+
 # 평가용 wav 잡음 삭제 -> R_test 저장
 def denoiseTestWav():
     test_wav_path = 'raw16k/test_wav'
@@ -107,6 +108,7 @@ def denoiseTestWav():
         dest = test_wav_denoise_path + "/" + wav_file[0:14] + "_denoise.wav"
         denoiseWav(fileName, dest)
         print(dest+" done... \r", end="")
+
 
 
 def main():

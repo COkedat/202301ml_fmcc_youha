@@ -424,7 +424,7 @@ fmcc_test_0523 male
 fmcc_test_0524 male
 fmcc_test_0525 male
 fmcc_test_0526 male
-fmcc_test_0527 feml
+fmcc_test_0527 male
 fmcc_test_0528 male
 fmcc_test_0529 male
 fmcc_test_0530 male
@@ -788,7 +788,7 @@ fmcc_test_0887 male
 fmcc_test_0888 male
 fmcc_test_0889 male
 fmcc_test_0890 male
-fmcc_test_0891 male
+fmcc_test_0891 feml
 fmcc_test_0892 male
 fmcc_test_0893 male
 fmcc_test_0894 male
@@ -836,7 +836,7 @@ fmcc_test_0935 male
 fmcc_test_0936 male
 fmcc_test_0937 male
 fmcc_test_0938 male
-fmcc_test_0939 male
+fmcc_test_0939 feml
 fmcc_test_0940 male
 fmcc_test_0941 male
 fmcc_test_0942 male
