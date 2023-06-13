@@ -64,7 +64,7 @@ def search_Best_Model(x_train, y_train):
 
     # 최적의 하이퍼파라미터에 대한 점 표시
     best_acc, best_C, best_gamma = max(zip(accuracy_values, C_values, gamma_values))
-    ax.scatter(best_C, best_gamma, best_acc, color='r', s=100, marker='*', label="Best params: C={}, gamma={}".format(best_C, best_gamma))
+    ax.scatter(best_C, best_gamma, best_acc, color='r', s=100, marker='*', label="Best params: C={}, gamma={}, accuracy={}".format(best_C, best_gamma, best_acc))
     ax.legend(fontsize=12)
 
     plt.show()
