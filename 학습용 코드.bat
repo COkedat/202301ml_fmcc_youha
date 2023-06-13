@@ -2,24 +2,20 @@
  
 :_MENU
 cls
-echo (처음일 경우 1-2-3-4-5-6 순서대로 실행)
+echo (처음일 경우 1-2-3-4-5 순서대로 실행)
 echo 1. 학습용 wav로 변경 및 잡음 제거
 echo 2. 테스트용 wav로 변경 및 잡음 제거
 echo 3. 학습용 wav를 csv로 특징 추출 
 echo 4. 테스트용 wav를 csv로 특징 추출
 echo 5. SVM 학습
-echo 6. SVM 결정
-echo 7. eval.pl 실행
 echo 0. 종료
-choice /c:12345670
+choice /c:123450
  
 IF %ERRORLEVEL% == 1 goto _E1
 IF %ERRORLEVEL% == 2 goto _E2
 IF %ERRORLEVEL% == 3 goto _E3
 IF %ERRORLEVEL% == 4 goto _E4
 IF %ERRORLEVEL% == 5 goto _E5
-IF %ERRORLEVEL% == 6 goto _E6
-IF %ERRORLEVEL% == 7 goto _E7
 IF %ERRORLEVEL% == 0 goto _END
 echo 종료..
 pause
@@ -67,19 +63,6 @@ start /wait python fmcc_main.py train
 pause
 goto _MENU
 
-
-rem 6. SVM 결정
-:_E6
-echo SVM 결정...
-start /wait python fmcc_main.py predict
-pause
-goto _MENU
-
-:_E7
-echo eval.pl 실행...
-perl eval.pl 유하_test_results.txt fmcc_test900_ref.txt
-pause
-goto _MENU
  
 :END
 exit
