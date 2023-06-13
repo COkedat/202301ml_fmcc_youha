@@ -24,10 +24,15 @@ from os.path import getsize
 # Grid search 통한 최적의 C, gamma 값 구하고 최적의 모델 구하기
 def search_Best_Model(x_train, y_train):
 
+    # gamma_default(scale) 구하기
+    n_features = x_train.shape[1]
+    variance = x_train.var()
+    gamma_default = 1 / (n_features * variance)
+
     # 하이퍼파라미터 그리드 정의
     param_grid = {
         'C': [0.1, 1, 10, 100],
-        'gamma': [1, 0.1, 0.01],
+        'gamma': [1, 0.1, 0.01, gamma_default],
         'kernel': ['rbf'] 
     }
 
