@@ -24,7 +24,11 @@ goto _MENU
 
 :_E2
 echo eval.pl 실행...
-perl eval.pl 유하_test_results.txt fmcc_test900_ref.txt
+set /p %str1%=평가할 파일 이름 입력 (기본 : 유하_test_results.txt):
+if "%str1%" == "" set str1="유하_test_results.txt"
+set /p str2=원본 파일 이름 입력 (기본 : fmcc_test900_ref.txt):
+if "%str2%" == "" set str2="fmcc_test900_ref.txt"
+perl eval.pl %str1% %str2%
 pause
 goto _MENU
  
