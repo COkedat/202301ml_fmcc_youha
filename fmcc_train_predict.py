@@ -33,7 +33,6 @@ def train_set(train_csv):
 
     # 라벨 칼럼 인코딩하기, Female 은 0, male 은 1
     class_mapping = {label: idx for idx, label in enumerate(np.unique(train_data['label']))}
-    class_mapping
 
     # 클래스 라벨의 strings을 integers로 변환
     train_data['label'] = train_data['label'].map(class_mapping)
