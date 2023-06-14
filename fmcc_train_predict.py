@@ -37,7 +37,7 @@ def search_Best_Model(x_train, y_train):
     }
 
     # Grid search
-    grid_search = GridSearchCV(SVC(), param_grid, cv=5, scoring='accuracy', return_train_score=True)
+    grid_search = GridSearchCV(SVC(), param_grid, cv=10, scoring='accuracy', return_train_score=True)
     grid_search.fit(x_train, y_train)
 
     # 최적의 파라미터, 정확도 출력
@@ -122,6 +122,9 @@ def train_set(train_csv):
         print("fit 문제 있음")
     print("옵션 : ",svm.get_params())
     print("특징 수 :  ",svm.n_features_in_,"개")
+    # 서포트 벡터의 개수와 특징의 수를 곱하여 전체 파라미터 계산
+    total_parameters = svm.support_vectors_.shape[0] * svm.n_features_in_
+    print("모델의 파라미터 개수: ", total_parameters,"개")
     print("모델 사이즈 : ", getsize('./trained/svm.pkl'),"bytes")
     print("Support Vector Machine")
     print("Accuracy on training set: {:.3f}".format(svm.score(X_train_std, y_train)))
@@ -180,5 +183,3 @@ def predict_set(test_csv):
             f.write("\n")
 
 
-train_set(train_csv="voice_train.csv")
-predict_set(test_csv="voice_test.csv")
