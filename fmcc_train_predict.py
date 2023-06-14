@@ -181,5 +181,6 @@ def predict_set(test_csv):
             elif(y1_pred_svm[i].item()==1):
                 f.write("male") 
             f.write("\n")
+    print("평가 완료. 결과는 유하_test_results.txt 에 저장되었습니다.")
 
 
