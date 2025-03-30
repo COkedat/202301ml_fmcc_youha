@@ -4,4 +4,4 @@
 **/*.raw linguist-vendored
 **/*.ctl linguist-vendored
 **/*.pl linguist-vendored
-**/*.r linguist-vendored
+**/*.r linguist-detectable=false
